@@ -1,0 +1,31 @@
+.button-group {
+    margin: 1% auto;
+}
+
+.button-item {
+    margin-right: 1%;
+}
+
+.dropdown-group {
+    width: 100%;
+}
+
+.dropdown-group > label {
+    font-size: 150%;
+    margin-right: 1%;
+}
+
+#grid {
+    display: block;
+}
+
+.grid-row {
+    display: flex;
+}
+
+.cell {
+    padding: 1rem;
+    border: 1px black solid;
+    margin-right: 1px;
+    margin-bottom: 1px;
+}
