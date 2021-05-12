@@ -121,14 +121,14 @@ function paintDiscovery(status) {
     if (status.Data.length === 0) {
         for (let i = 0; i < status.Path.length; i++) {
             setTimeout(() => {
-                paintPath(status.Path)
+                paintPath(status.Path, status.EndId)
             }, 10 * i);
         }
     } else {
         for (let i = 1; i <= status.Data.length; i++) {
             if (i === status.Data.length) {
                 setTimeout(() => {
-                    paintPath(status.Path)
+                    paintPath(status.Path, status.EndId)
                 }, 10 * i);
             }
             let node = status.Data[i]
@@ -139,12 +139,13 @@ function paintDiscovery(status) {
     }
 }
 
-function paintPath(path) {
+function paintPath(path, endId) {
 
-    for (let i = 0; i < path.length; i++) {
+    for (let i = 1; i < path.length; i++) {
         let node = path[i]
         setTimeout(function () {
             document.getElementById(node.Id).style.backgroundColor = "yellow"
+            document.getElementById(endId).style.backgroundColor = "#f55e5e"
         }, 10 * i);
     }
 }
