@@ -1,16 +1,8 @@
 package controller
 
-import (
-	"encoding/json"
-	"fmt"
-	"github.com/gin-gonic/gin"
-	"io/ioutil"
-	"klauskie.com/pathfinder/backend/models"
-	"log"
-)
-
 
 // POST /
+/*
 func HandleRunResults (c *gin.Context) {
 	body, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
@@ -46,3 +38,4 @@ func HandleRunResults (c *gin.Context) {
 		"Walls": s.Wall,
 	})
 }
+*/

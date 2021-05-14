@@ -1,39 +1,79 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"klauskie.com/pathfinder/backend/controller"
+	"encoding/json"
+	"errors"
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
+	"klauskie.com/pathfinder/backend/models"
+	"klauskie.com/pathfinder/backend/src"
 )
 
+// GOOS=linux go build -o pathLambda
+
 func main() {
-	r := gin.Default()
-
-	r.Use(CORSMiddleware)
-
-	api := r.Group("/api")
-	{
-		api.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{
-				"message": "hola",
-			})
-		})
-		api.POST("/calculate", controller.HandleRunResults)
-	}
-
-	r.Run("127.0.0.1:8080")
+	lambda.Start(HandlerApiGateway)
 }
 
-func CORSMiddleware(c *gin.Context) {
-	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-	c.Writer.Header().Set("Access-Control-Allow-Credentials", "false")
-	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, token, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-	c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET")
+func HandlerApiGateway(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	input := unMarshalInputEvent([]byte(request.Body))
 
-	if c.Request.Method == "OPTIONS" {
-		c.AbortWithStatus(204)
-		return
+	output, err := Run(input)
+	if err != nil {
+		return lResponse(err.Error(), 404), err
 	}
 
-	c.Next()
+	outputJson, err := json.Marshal(&output)
+	if err != nil {
+		return lResponse("Failed marshaling output to json", 500), err
+	}
+
+	return lResponse(string(outputJson), 200), nil
 }
 
+func lResponse(body string, statusCode int) events.APIGatewayProxyResponse {
+	return events.APIGatewayProxyResponse{Body: body, StatusCode: statusCode}
+}
+
+func Run(event InputEvent) (OutputEvent, error) {
+	search := models.Create(event.Algo, event.Wall, event.StartId, event.EndId, event.Rows, event.Cols)
+	if search == nil {
+		return OutputEvent{}, errors.New("No algorithm found with provided algoId")
+	}
+	nodes, path := search.Run()
+
+	output := OutputEvent {
+		Data:    nodes,
+		Grid:    search.GetPathfinder().Grid,
+		Path:    path,
+		StartId: search.GetPathfinder().StartId,
+		EndId:   search.GetPathfinder().EndId,
+		Walls:   event.Wall,
+	}
+
+	return output, nil
+}
+
+func unMarshalInputEvent(body []byte) InputEvent {
+	var input InputEvent
+	json.Unmarshal(body, &input)
+	return input
+}
+
+type InputEvent struct {
+	Wall []int `json:"wall"`
+	Algo int `json:"algo"`
+	StartId int `json:"start_id"`
+	EndId int `json:"end_id"`
+	Rows int `json:"rows"`
+	Cols int `json:"cols"`
+}
+
+type OutputEvent struct {
+	Data []src.Node `json:"Data"`
+	Grid [][]*src.Node `json:"Grid"`
+	Path []src.Node `json:"Path"`
+	StartId int `json:"StartId"`
+	EndId int `json:"EndId"`
+	Walls []int `json:"Walls"`
+}
