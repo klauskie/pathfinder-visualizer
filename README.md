@@ -19,12 +19,12 @@ Website: https://klauskie.github.io/pathfinder-visualizer/frontend/
 
 ![alt text](https://github.com/klauskie/pathfinder-visualizer/blob/main/docs/demo-1.gif?raw=true)
 
-![alt text](https://github.com/klauskie/pathfinder-visualizer/blob/main/docs/demo-3.gif?raw=true)
+![alt text](https://github.com/klauskie/pathfinder-visualizer/blob/main/docs/demo-2.gif?raw=true)
 
 ___
 
 ### A*
-![alt text](https://github.com/klauskie/pathfinder-visualizer/blob/main/docs/demo-2.gif?raw=true)
+![alt text](https://github.com/klauskie/pathfinder-visualizer/blob/main/docs/demo-3.gif?raw=true)
 
 
 
