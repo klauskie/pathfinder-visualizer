@@ -112,7 +112,6 @@ function calculatePath(algoId) {
 // Path Paint
 
 function start() {
-    clearAll()
     let algoId = document.getElementById("algo").value
     calculatePath(algoId)
 }
