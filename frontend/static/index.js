@@ -8,7 +8,7 @@ let startId = 246
 let endId = 262
 const wallColor = "#332727"
 const cellColor = "#FFF"
-const API_CALC_PATH = "http://127.0.0.1:8080/api/calculate"
+const API_CALC_PATH = "https://dhnp1uigod.execute-api.us-east-1.amazonaws.com/test/calculate"
 // END
 
 function newGrid() {
@@ -89,10 +89,9 @@ function calculatePath(algoId) {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", API_CALC_PATH, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    //xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
     xhr.send(JSON.stringify({
-        "length": wall.length,
         "wall": wall,
         "algo": parseInt(algoId),
         "start_id": startId,
