@@ -68,6 +68,13 @@ function clearAll() {
     //clearWalls()
     clearGrid()
     paintEndpoints()
+    wall = []
+}
+
+function clearAllButWalls() {
+    clearGrid()
+    paintEndpoints()
+    wall.forEach(id => document.getElementById(id).style.backgroundColor = wallColor);
 }
 
 function paintEndpoints() {
@@ -112,6 +119,7 @@ function calculatePath(algoId) {
 // Path Paint
 
 function start() {
+    clearAllButWalls()
     let algoId = document.getElementById("algo").value
     calculatePath(algoId)
 }
@@ -155,12 +163,12 @@ function paintPath(path, endId) {
 
 function mouseDownHandler() {
     isMouseDown = true
-    console.log("DOWN: ", isMouseDown)
+    //console.log("DOWN: ", isMouseDown)
 }
 
 function mouseUpHandler() {
     isMouseDown = false
-    console.log("UP: ", isMouseDown)
+    //console.log("UP: ", isMouseDown)
 }
 
 function paintCellHandler(element) {
